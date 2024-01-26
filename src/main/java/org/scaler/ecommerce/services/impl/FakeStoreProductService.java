@@ -1,10 +1,11 @@
-package org.scaler.ecommerce.services;
+package org.scaler.ecommerce.services.impl;
 
 import org.scaler.ecommerce.dto.CreateProductDTO;
 import org.scaler.ecommerce.dto.FakeStoreProductDTO;
 import org.scaler.ecommerce.exceptions.ProductDoesNotExistException;
 import org.scaler.ecommerce.models.Category;
 import org.scaler.ecommerce.models.Product;
+import org.scaler.ecommerce.services.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpMethod;

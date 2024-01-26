@@ -1,4 +1,4 @@
-package org.scaler.ecommerce.services;
+package org.scaler.ecommerce.services.impl;
 
 import org.scaler.ecommerce.dto.FakeStoreProductDTO;
 import org.scaler.ecommerce.models.Category;
@@ -12,11 +12,10 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
-public class CategoryService {
-
+public class FakeStoreCategoryService {
     private final RestTemplate restTemplate;
 
-    public CategoryService(RestTemplate restTemplate) {
+    public FakeStoreCategoryService(RestTemplate restTemplate) {
         this.restTemplate = restTemplate;
     }
 
@@ -24,7 +23,7 @@ public class CategoryService {
         return restTemplate.getForObject("https://fakestoreapi.com/products/categories", String[].class);
     }
 
-    public List<Product> getCategory(String category) {
+    public List<Product> getProductsForCategory(String category) {
         FakeStoreProductDTO[] products = restTemplate.getForObject("https://fakestoreapi.com/products/category/" + category,
                 FakeStoreProductDTO[].class);
 

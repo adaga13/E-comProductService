@@ -1,14 +1,14 @@
-package org.scaler.ecommerce.services;
+package org.scaler.ecommerce.services.impl;
 
 import org.scaler.ecommerce.exceptions.ProductDoesNotExistException;
 import org.scaler.ecommerce.models.Category;
 import org.scaler.ecommerce.models.Product;
 import org.scaler.ecommerce.repositories.CategoryRepository;
 import org.scaler.ecommerce.repositories.ProductRepository;
+import org.scaler.ecommerce.services.ProductService;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Optional;
 
 @Service("selfProduct")
 public class SelfProductService implements ProductService {
@@ -53,8 +53,9 @@ public class SelfProductService implements ProductService {
         if (product.getPrice() != null)
             existingProduct.setPrice(product.getPrice());
 
-        if (product.getCategory() != null) {
-            existingProduct.setCategory(product.getCategory());
+        Category category = product.getCategory();
+        if (category != null && category.getId() != null) {
+            existingProduct.setCategory(category);
         }
 
         if (product.getImageUrl() != null)

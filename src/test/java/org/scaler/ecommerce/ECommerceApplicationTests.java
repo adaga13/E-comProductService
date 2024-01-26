@@ -1,14 +1,18 @@
 package org.scaler.ecommerce;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.scaler.ecommerce.models.Category;
+import org.scaler.ecommerce.models.Product;
 import org.scaler.ecommerce.repositories.CategoryRepository;
 import org.scaler.ecommerce.repositories.ProductRepository;
 import org.scaler.ecommerce.repositories.projections.ProductProjection;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Arrays;
 import java.util.List;
@@ -34,10 +38,11 @@ class ECommerceApplicationTests {
     }
 
     @Test
-    void testCategoryFetch() {
-        Optional<Category> category = categoryRepository.findByName("Electronic");
-        category.get().getProducts();
-        Assertions.assertNotNull(categoryRepository.findByName("Electronic").orElseGet(() -> new Category("xyz")));
+    @Transactional
+    void testCategoryFetch() throws JsonProcessingException {
+        List<Category> categories = categoryRepository.findAll();
+        System.out.println(new ObjectMapper().writeValueAsString(categories));
+        Assertions.assertNotNull(categoryRepository.findByName("Mobile").orElseGet(() -> new Category("xyz")));
     }
 
     @Test
@@ -54,6 +59,13 @@ class ECommerceApplicationTests {
     void testProductsFetchByTitle() {
         System.out.println(productRepository.findProductsByTitleAndPrice("Mixer Grinder", 1000D, 3000D,
                 PageRequest.of(0, 10)).getContent());
+    }
+
+    @Test
+    @Transactional
+    void testProductsFetch() throws JsonProcessingException {
+        List<Product> products = productRepository.findAll();
+        System.out.println(new ObjectMapper().writeValueAsString(products));
     }
 
 }
