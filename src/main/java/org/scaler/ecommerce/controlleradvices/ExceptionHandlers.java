@@ -2,6 +2,7 @@ package org.scaler.ecommerce.controlleradvices;
 
 import org.scaler.ecommerce.dto.ExceptionDto;
 import org.scaler.ecommerce.exceptions.ProductDoesNotExistException;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -14,6 +15,6 @@ public class ExceptionHandlers {
         ExceptionDto dto = new ExceptionDto();
         dto.setMessage(exception.getMessage());
         dto.setDetail("Check the product id. It probably doesn't exist.");
-        return ResponseEntity.ok(dto);
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(dto);
     }
 }

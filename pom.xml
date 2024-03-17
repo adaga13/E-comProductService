@@ -10,7 +10,7 @@
     </parent>
     <groupId>org.scaler</groupId>
     <artifactId>e-commerce</artifactId>
-    <version>0.0.1-SNAPSHOT</version>
+    <version>1.0.0</version>
     <name>e-commerce</name>
     <description>e-commerce</description>
     <properties>
@@ -55,6 +55,14 @@
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-oauth2-resource-server</artifactId>
         </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-data-redis</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.retry</groupId>
+            <artifactId>spring-retry</artifactId>
+        </dependency>
 
         <dependency>
             <groupId>org.springframework.boot</groupId>
@@ -71,7 +79,6 @@
             <artifactId>flyway-mysql</artifactId>
             <version>10.6.0</version>
         </dependency>
-
     </dependencies>
 
     <build>

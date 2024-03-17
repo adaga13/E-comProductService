@@ -12,13 +12,14 @@ import lombok.Getter;
 import lombok.Setter;
 import org.scaler.ecommerce.serializers.ProductSerializer;
 
+import java.io.Serializable;
 import java.util.List;
 
 @Getter
 @Setter
 @Entity
 @JsonInclude(Include.NON_NULL)
-public class Category extends BaseModel {
+public class Category extends BaseModel implements Serializable {
 
     private String name;
 

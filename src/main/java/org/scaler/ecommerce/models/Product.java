@@ -7,11 +7,14 @@ import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.Version;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
 import org.scaler.ecommerce.serializers.ProductCategorySerializer;
+
+import java.io.Serializable;
 
 @Getter
 @Setter
@@ -19,7 +22,7 @@ import org.scaler.ecommerce.serializers.ProductCategorySerializer;
 @Builder
 @Entity
 @JsonInclude(Include.NON_NULL)
-public class Product extends BaseModel {
+public class Product extends BaseModel implements Serializable {
 
     private String title;
 
@@ -32,6 +35,11 @@ public class Product extends BaseModel {
     private Category category;
 
     private String imageUrl;
+
+    private int quantity;
+
+    @Version
+    private Integer version = 1;
 
     public Product() {
 

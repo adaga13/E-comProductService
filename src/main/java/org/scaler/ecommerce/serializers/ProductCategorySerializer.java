@@ -20,10 +20,18 @@ public class ProductCategorySerializer extends StdSerializer<Category> {
     @Override
     public void serialize(Category category, JsonGenerator jsonGenerator, SerializerProvider serializerProvider) throws IOException {
         jsonGenerator.writeStartObject("category");
-        jsonGenerator.writeNumberField("id", category.getId());
-        jsonGenerator.writeStringField("name", category.getName());
-        jsonGenerator.writeStringField("createdAt", String.valueOf(category.getCreatedAt()));
-        jsonGenerator.writeStringField("lastUpdatedAt", String.valueOf(category.getLastUpdatedAt()));
+        if (category.getId() != null)
+            jsonGenerator.writeNumberField("id", category.getId());
+
+        if (category.getName() != null)
+            jsonGenerator.writeStringField("name", category.getName());
+
+        if (category.getCreatedAt() != null)
+            jsonGenerator.writeStringField("createdAt", String.valueOf(category.getCreatedAt()));
+
+        if (category.getLastUpdatedAt() != null)
+            jsonGenerator.writeStringField("lastUpdatedAt", String.valueOf(category.getLastUpdatedAt()));
+
         jsonGenerator.writeEndObject();
     }
 }

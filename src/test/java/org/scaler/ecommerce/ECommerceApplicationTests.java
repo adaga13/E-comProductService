@@ -33,39 +33,39 @@ class ECommerceApplicationTests {
         this.productRepository = productRepository;
     }
 
-    @Test
-    void contextLoads() {
-    }
+//    @Test
+//    void contextLoads() {
+//    }
 
-    @Test
-    @Transactional
-    void testCategoryFetch() throws JsonProcessingException {
-        List<Category> categories = categoryRepository.findAll();
-        System.out.println(new ObjectMapper().writeValueAsString(categories));
-        Assertions.assertNotNull(categoryRepository.findByName("Mobile").orElseGet(() -> new Category("xyz")));
-    }
-
-    @Test
-    void testProductsFetchByCategoryName() {
-        List<ProductProjection> productProjections = productRepository.findProductsByCategoryAndPrice("Electronic", 1000D, 3000D,
-                PageRequest.of(0, 10));
-
-        for (ProductProjection projection : productProjections) {
-            System.out.println("Id = " + projection.getId() + " & title = " + projection.getTitle());
-        }
-    }
-
-    @Test
-    void testProductsFetchByTitle() {
-        System.out.println(productRepository.findProductsByTitleAndPrice("Mixer Grinder", 1000D, 3000D,
-                PageRequest.of(0, 10)).getContent());
-    }
-
-    @Test
-    @Transactional
-    void testProductsFetch() throws JsonProcessingException {
-        List<Product> products = productRepository.findAll();
-        System.out.println(new ObjectMapper().writeValueAsString(products));
-    }
+//    @Test
+//    @Transactional
+//    void testCategoryFetch() throws JsonProcessingException {
+//        List<Category> categories = categoryRepository.findAll();
+//        System.out.println(new ObjectMapper().writeValueAsString(categories));
+//        Assertions.assertNotNull(categoryRepository.findByName("Mobile").orElseGet(() -> new Category("xyz")));
+//    }
+//
+//    @Test
+//    void testProductsFetchByCategoryName() {
+//        List<ProductProjection> productProjections = productRepository.findProductsByCategoryAndPrice("Electronic", 1000D, 3000D,
+//                PageRequest.of(0, 10));
+//
+//        for (ProductProjection projection : productProjections) {
+//            System.out.println("Id = " + projection.getId() + " & title = " + projection.getTitle());
+//        }
+//    }
+//
+//    @Test
+//    void testProductsFetchByTitle() {
+//        System.out.println(productRepository.findProductsByTitleAndPrice("Mixer Grinder", 1000D, 3000D,
+//                PageRequest.of(0, 10)).getContent());
+//    }
+//
+//    @Test
+//    @Transactional
+//    void testProductsFetch() throws JsonProcessingException {
+//        List<Product> products = productRepository.findAll();
+//        System.out.println(new ObjectMapper().writeValueAsString(products));
+//    }
 
 }

@@ -1,19 +1,22 @@
 package org.scaler.ecommerce.services.impl;
 
-import org.scaler.ecommerce.dto.CreateProductDTO;
 import org.scaler.ecommerce.dto.FakeStoreProductDTO;
 import org.scaler.ecommerce.exceptions.ProductDoesNotExistException;
 import org.scaler.ecommerce.models.Category;
 import org.scaler.ecommerce.models.Product;
 import org.scaler.ecommerce.services.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.redis.core.HashOperations;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -23,31 +26,42 @@ public class FakeStoreProductService implements ProductService {
 
     private final RestTemplate restTemplate;
 
+    private final HashOperations<String, String, Object> hashOperations;
+
     @Autowired
-    public FakeStoreProductService(RestTemplate restTemplate) {
+    public FakeStoreProductService(RestTemplate restTemplate, RedisTemplate redisTemplate) {
         this.restTemplate = restTemplate;
+        this.hashOperations = redisTemplate.opsForHash();
     }
 
     @Override
     public Product getSingleProduct(Long id) throws ProductDoesNotExistException {
+        String redisKey = "PRODUCT_" + id;
+        Product productFromCache = (Product) hashOperations.get("PRODUCTS", redisKey);
+        if (productFromCache != null)
+            return productFromCache;
+
         FakeStoreProductDTO fakeStoreProductDTO = restTemplate.getForObject("https://fakestoreapi.com/products/" + id,
                 FakeStoreProductDTO.class);
 
         if (fakeStoreProductDTO == null)
             throw new ProductDoesNotExistException("Product with id : " + id + " does not exist.");
-        return convertProductDTOToProduct(fakeStoreProductDTO);
+
+        productFromCache = convertProductDTOToProduct(fakeStoreProductDTO);
+        hashOperations.put("PRODUCTS", redisKey, productFromCache);
+        return productFromCache;
     }
 
     @Override
-    public List<Product> getAllProducts() {
+    public Page<Product> getAllProducts(int pageNumber, int pageSize, String sortBy, Sort.Direction orderBy) {
         FakeStoreProductDTO[] fakeStoreProductDTOS = restTemplate.getForObject("https://fakestoreapi.com/products",
                 FakeStoreProductDTO[].class);
         if (fakeStoreProductDTOS == null)
-            return new ArrayList<>();
+            return Page.empty();
 
-        return Arrays.stream(fakeStoreProductDTOS)
+        return new PageImpl<>(Arrays.stream(fakeStoreProductDTOS)
                 .map(this::convertProductDTOToProduct)
-                .collect(Collectors.toList());
+                .collect(Collectors.toList()));
     }
 
     @Override

@@ -1,12 +1,14 @@
 package org.scaler.ecommerce.controllers;
 
-import org.scaler.ecommerce.dto.CreateProductDTO;
-import org.scaler.ecommerce.exceptions.CategoryDoesNotExistException;
+import org.scaler.ecommerce.dto.BuyProductDto;
 import org.scaler.ecommerce.exceptions.ProductDoesNotExistException;
 import org.scaler.ecommerce.models.Product;
 import org.scaler.ecommerce.services.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Sort;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -23,8 +25,11 @@ public class ProductController {
     }
 
     @GetMapping
-    public List<Product> getAllProducts() {
-        return productService.getAllProducts();
+    public Page<Product> getAllProducts(@RequestParam("pageNumber") int pageNumber,
+                                        @RequestParam("pageSize") int pageSize,
+                                        @RequestParam("sortBy") String sortBy,
+                                        @RequestParam("orderBy")Sort.Direction orderBy) {
+        return productService.getAllProducts(pageNumber, pageSize, sortBy, orderBy);
     }
 
     @GetMapping("/{id}")
@@ -59,4 +64,9 @@ public class ProductController {
         productService.deleteProduct(id);
     }
 
+    @PostMapping("/buy")
+    public ResponseEntity<Boolean> buyProduct(@RequestBody BuyProductDto buyProductDto) throws ProductDoesNotExistException {
+        return ResponseEntity.ok(productService.buyProduct(buyProductDto.getProductId(), buyProductDto.getQuantity()));
+
+    }
 }
